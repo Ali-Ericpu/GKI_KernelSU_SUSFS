@@ -970,6 +970,12 @@ jobs:
             disable_config CONFIG_ANDROID_PARANOID_NETWORK
           fi
 
+      - name: 回移 epoll_pwait2 系统调用 (5.10 必需)
+        if: inputs.kernel_version == '5.10'
+        working-directory: ${{ env.KERNEL_ROOT }}/common
+        run: |
+          set -e
+          bash "$GITHUB_WORKSPACE/backport_epoll_pwait2.sh"
       - name: 注入 NTSync 内核配置
         if: inputs.droidspaces != 'off' && inputs.droidspaces_ntsync
         working-directory: ${{ env.KERNEL_ROOT }}/common
